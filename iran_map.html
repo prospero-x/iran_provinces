@@ -70,48 +70,89 @@
 </head>
 <body class="page-template-default page page-id-7030 notice-1 notice-present demo-theme-none scrolled">
 <div id="page" class="site ">
-<header id="masthead" class="site-header" role="banner">
-<div class="content-col">
-<div class="row">
-<div class="col-md-2">
-<a class="menu-toggle" data-controls="site-navigation" aria-controls="primary-menu" aria-expanded="false">Primary Menu</a>
-<a href="https://www.amcharts.com/" id="logo" rel="home">amCharts</a>
-</div>
 
-<div class="col-md-2 right">
-<form role="search" method="get" class="search-form" action="https://www.amcharts.com/">
-<label>
-<span class="screen-reader-text">Search for:</span>
-<input type="search" class="search-field" placeholder="Search …" value="" name="s">
-</label>
-<input type="submit" class="search-submit" value="Search">
-</form> </div>
-</div>
-</div>
-</header>
+
+
 <div id="content" class="site-content">
 <div id="primary" class="content-area">
 <main id="main" class="site-main" role="main">
 <article id="post-7030" class="post-7030 page type-page status-publish hentry">
-<header class="entry-header hero">
-<div class="content-col">
-<div class="row">
-
-
-
-
-
-</div>
-</div>
-</header>
 <div class="entry-content content-col">
 <p>&nbsp;</p>
 <div class="row">
 <div class="col-md-6 col-sm-12">
 
 <!--- Map Header --->
-<h2>اُستان های ایران</h2>
+<h4>اُستان های ایران</h4>
 </div>
+
+
+<div id = "top_box">
+    <div id = "subtop_box">
+        <div
+            id = "button_div"
+            style = "float:left">
+            <button
+                type="button"
+                id = "start_button"
+                onclick= "startQuiz()">
+                Start
+            </button>
+        </div>
+    </div>
+    <div
+        id = "timer_div"
+        style = "float:left">
+        <span id="minutes">10</span>:<span id="seconds">00</span>
+    </div>
+<div>
+
+<script>
+  function startQuiz() {
+
+
+     if (typeof startQuiz.callcount == 'undefined') {
+
+        // Add new content
+          const newContent = document.createTextNode("You started the quiz!\n(more features are on the way...)");
+
+         const newDiv = document.createElement("div", style = "float:right");
+         newDiv.appendChild(newContent);
+         var parentDiv = document.getElementById("subtop_box");
+         const buttonDiv = document.getElementById("button_div");
+         parentDiv.insertBefore(newDiv, buttonDiv);
+
+
+        // Remove the start button
+        document.getElementById("start_button").remove();
+
+        // Single-call only
+        startQuiz.callcount = 0;
+     }
+     startQuiz.callcount++;
+
+     console.log("I've been called " + startQuiz.callcount + " times.\n");
+      // Initialize quiz to ten minutes
+      var seconds_remaining = 599;
+      tick_clock(seconds_remaining);
+      setInterval(function() {
+        seconds_remaining--;
+        tick_clock(seconds_remaining);
+      }, 1000);
+  }
+
+  function tick_clock(seconds_remaining) {
+      var minutes = document.getElementById("minutes");
+      var seconds = document.getElementById("seconds");
+     console.log(seconds_remaining);
+     console.log("seconds: " + seconds_remaining%60);
+     console.log("padded seconds: " + pad(seconds_remaining%60));
+     seconds.innerHTML=pad(seconds_remaining%60);
+     minutes.innerHTML=pad(parseInt(seconds_remaining/60,10));
+  }
+  function pad (val) {return val > 9 ? val: "0" + val;}
+</script>
+
 
 
 <div class="demo-theme-dark row">
