@@ -169,11 +169,39 @@ var IranProvincesMap = AmCharts.makeChart("chartdiv", {
         ["west azerbaijan",  "IR-02"],
         ["آذربایجان غربی",   "IR-02"],
 
+        ["ardabil",  "IR-03"],
+        ["اردبیل",   "IR-03"],
+
+        ["esfahan",  "IR-04"],
+        ["اصفهان",   "IR-04"],
+
+        ["ilam",  "IR-05"],
+        ["ایلام",  "IR-05"],
+
+        ["bushehr",  "IR-06"],
+        ["بوشهر",    "IR-06"],
+
+
+        ["tehran",  "IR-07"],
+        ["تهران",   "IR-07"],
+
+        ["chaharmahal and bakhtiari",  "IR-08"],
+        ["چهارمحال و بختیاری",         "IR-08"],
+
+        ["khuzestan",  "IR-10"],
+        ["خوزستان",    "IR-10"],
+
         ["zanjan", "IR-11"],
-        ["زنجان",   "IR-11"],
+        ["زنجان",  "IR-11"],
+
+        ["semnan", "IR-12"],
+        ["سمنان",  "IR-12"],
 
         ["sistan and baluchestan", "IR-13"],
         ["سیستان و بلوچستان",      "IR-13"],
+
+        ["fars", "IR-14"],
+        ["فارس", "IR-14"],
 
         ["kerman", "IR-15"],
         ["کرمان",  "IR-15" ],
@@ -181,15 +209,42 @@ var IranProvincesMap = AmCharts.makeChart("chartdiv", {
         ["kordestan",   "IR-16"],
         ["کردستان",     "IR-16" ],
 
-        ["kermanshah",    "IR-17"],
+        ["kermanshah",   "IR-17"],
         ["کرمانشاه",     "IR-17" ],
+
+        ["kohgiluyeh and boyer ahmad",   "IR-18"],
+        ["kohgiluyeh and boyer-ahmad",   "IR-18"],
+        ["کهگیلویه و بویراحمد",          "IR-18" ],
 
         ["gilan",    "IR-19"],
         ["گیلان",     "IR-19" ],
 
+        ["lorestan",   "IR-20"],
+        ["لرستان",     "IR-20" ],
+
+        ["mazandaran",  "IR-21"],
+        ["مازندران",      "IR-21" ],
+
+        ["markazi",  "IR-22"],
+        ["مرکزی",    "IR-22" ],
+
+        ["hormozgan",  "IR-23"],
+        ["هرمزگان",    "IR-23" ],
+
+        ["hamadan",  "IR-24"],
+        ["همدان",    "IR-24" ],
+
+        ["yazd",  "IR-25"],
+        ["یزد",    "IR-25" ],
+
+        ["qom",  "IR-26"],
+        ["قم",    "IR-26" ],
+
+        ["golestan",  "IR-27"],
+        ["گلستان",    "IR-27"],
+
         ["qazvin",  "IR-28"],
         ["قزوین",   "IR-28" ],
-
 
         ["south khorasan", "IR-29"],
         ["خراسان جنوبی",   "IR-29"],
@@ -223,15 +278,17 @@ var IranProvincesMap = AmCharts.makeChart("chartdiv", {
 
             // Constantly check input string to see if it's a valid province name
             const guess = this.value.toLowerCase();
-            console.log(guess);
-            console.log(provinceNames);
             if (provinceNames.has(guess)) {
 
                 // The string is a correct province name. Highlight that province.
                 var provinceId = provinceNames.get(guess);
 
                 var provinceSVG = IranProvincesMap.dataProvider.areas.find(x => x.id == provinceId);
+
+                // Make the fill color green
+                provinceSVG.baseSettings.selectedColor = "#099562"
                 provinceSVG.showAsSelected = true;
+                console.log(provinceSVG);
 
                 // Redraw the map.
                 IranProvincesMap.validateData();
@@ -250,7 +307,7 @@ var IranProvincesMap = AmCharts.makeChart("chartdiv", {
                     provinceNames.delete(k)
                 });
 
-
+                console.log(provinceNames.size);
                 // Clear the input field.
                 this.value = "";
             }
