@@ -151,12 +151,6 @@ var IranProvincesMap = AmCharts.makeChart("chartdiv", {
         "dataProvider" : {
           "mapURL": "./iranHigh.svg",
           "getAreasFromMap": true,
-	  "areas": [
-            {
-                "id": "IR-32",
-                "showAsSelected": true,
-            }
-        ]
         },
         "areasSettings": {
           "autoZoom": false,
@@ -167,11 +161,47 @@ var IranProvincesMap = AmCharts.makeChart("chartdiv", {
 
     // Input will be continuously checked against the provinceNames
     // map. If the input exists in provinceNames, that province will
-    // be highlighted.
+    // be highlighted. Note: we do NOT include farsi diacritics here.
     var provinceNames = new Map([
+        ["east azerbaijan",  "IR-01"],
+        ["آذربایجان شرقی",   "IR-01"],
+
+        ["west azerbaijan",  "IR-02"],
+        ["آذربایجان غربی",   "IR-02"],
+
+        ["zanjan", "IR-11"],
+        ["زنجان",   "IR-11"],
+
+        ["sistan and baluchestan", "IR-13"],
+        ["سیستان و بلوچستان",      "IR-13"],
+
         ["kerman", "IR-15"],
-        ["کرمان", "IR-15" ],
-        ["alborz", "IR-32"]
+        ["کرمان",  "IR-15" ],
+
+        ["kordestan",   "IR-16"],
+        ["کردستان",     "IR-16" ],
+
+        ["kermanshah",    "IR-17"],
+        ["کرمانشاه",     "IR-17" ],
+
+        ["gilan",    "IR-19"],
+        ["گیلان",     "IR-19" ],
+
+        ["qazvin",  "IR-28"],
+        ["قزوین",   "IR-28" ],
+
+
+        ["south khorasan", "IR-29"],
+        ["خراسان جنوبی",   "IR-29"],
+
+        ["razavi khorasan", "IR-30"],
+        ["خراسان رضوی",     "IR-30"],
+
+        ["north khorasan", "IR-31"],
+        ["خراسان شمالی",   "IR-31"],
+
+        ["alborz", "IR-32"],
+        ["البرز",  "IR-32"],
     ]);
 
   function startQuiz() {
@@ -193,6 +223,8 @@ var IranProvincesMap = AmCharts.makeChart("chartdiv", {
 
             // Constantly check input string to see if it's a valid province name
             const guess = this.value.toLowerCase();
+            console.log(guess);
+            console.log(provinceNames);
             if (provinceNames.has(guess)) {
 
                 // The string is a correct province name. Highlight that province.
@@ -203,6 +235,20 @@ var IranProvincesMap = AmCharts.makeChart("chartdiv", {
 
                 // Redraw the map.
                 IranProvincesMap.validateData();
+
+                // Delete all other values in the map with this key. This is
+                // necessary to avoid a bug in which the user types "Kerman" in
+                // And then is prevented from typing "Kermanshah" in farsi
+                // because the key "Kermanshah" is still in the map, in both
+                // english and farsi.
+                keysToDelete = new Array();
+                for (let [k, v] of provinceNames)
+                    if (v == provinceId)
+                        keysToDelete.push(k);
+
+                keysToDelete.forEach(function(k, idx, arr) {
+                    provinceNames.delete(k)
+                });
 
 
                 // Clear the input field.
