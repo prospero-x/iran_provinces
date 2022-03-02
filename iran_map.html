@@ -159,10 +159,14 @@ var IranProvincesMap = AmCharts.makeChart("chartdiv", {
       });
 
 
+    var provinceNames = new Map([
+        ["tehran", "IR-07"]
+    ])
+
     // Input will be continuously checked against the provinceNames
     // map. If the input exists in provinceNames, that province will
     // be highlighted. Note: we do NOT include farsi diacritics here.
-    var provinceNames = new Map([
+    var provinceNames_ = new Map([
         ["east azerbaijan",  "IR-01"],
         ["آذربایجان شرقی",   "IR-01"],
 
@@ -271,9 +275,10 @@ var IranProvincesMap = AmCharts.makeChart("chartdiv", {
          const buttonDiv = document.getElementById("button_div");
          parentDiv.insertBefore(newDiv, buttonDiv);
 
-	 // Add new input node
+	// Add new input node
         var input = document.createElement("input");
         input.type = "text";
+        input.id = "input_box";
         input.onkeyup = function() {
 
             // Constantly check input string to see if it's a valid province name
@@ -288,7 +293,6 @@ var IranProvincesMap = AmCharts.makeChart("chartdiv", {
                 // Make the fill color green
                 provinceSVG.baseSettings.selectedColor = "#099562"
                 provinceSVG.showAsSelected = true;
-                console.log(provinceSVG);
 
                 // Redraw the map.
                 IranProvincesMap.validateData();
@@ -307,27 +311,30 @@ var IranProvincesMap = AmCharts.makeChart("chartdiv", {
                     provinceNames.delete(k)
                 });
 
-                console.log(provinceNames.size);
                 // Clear the input field.
                 this.value = "";
+
+                // Since we've been removing correct guesses from provincesMa,
+                // an empty map means 100% correctness.
+                if (provinceNames.size == 0) {
+                    console.log("finished with " + seconds_remaining + " seconds left.");
+                    document.getElementById("timer_div").remove();
+                    document.getElementById("input_box").remove();
+
+                    const seconds_taken = initial_timer_seconds - seconds_remaining;
+                    const newContent = document.createTextNode(
+                        "Congrats! You finished the quiz in "
+                        + seconds_taken + " seconds!");
+
+                    const newDiv = document.createElement(
+                        "div", style = "float:right");
+                    newDiv.appendChild(newContent);
+                    var parentDiv = document.getElementById("subtop_box");
+                }
             }
         };
 
         parentDiv.insertBefore( input, buttonDiv);
-
-        /*
-        var AlborzElement = TheChart.dataProvider.areas.find(x => x.id == "IR-32");
-        var SomeElement = TheChart.dataProvider.areas.find(x => x.id == "IR-15");
-        SomeElement.showAsSelected = true;
-        console.log(AlborzElement);
-        console.log(SomeElement);
-        TheChart.validateData();
-
-        console.log(provinceNames);
-        console.log(provinceNames[5]);
-        console.log(provinceNames.has(5));
-        console.log(provinceNames.has("baz"));
-        */
 
 
         // Remove the start button
@@ -339,7 +346,8 @@ var IranProvincesMap = AmCharts.makeChart("chartdiv", {
      startQuiz.callcount++;
 
       // Initialize quiz to ten minutes
-      var seconds_remaining = 599;
+      const initial_timer_seconds = 599;
+      var seconds_remaining = initial_timer_seconds;
       tick_clock(seconds_remaining);
       setInterval(function() {
         seconds_remaining--;
